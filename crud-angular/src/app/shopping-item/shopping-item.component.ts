@@ -11,10 +11,12 @@ import { DataService } from '../data.service';
 
 export class ShoppingItemComponent implements OnInit {
   shoppingItemList: Item[] = [];
+  selectedItem: Item;
+  toggleForm: boolean = false;
 
   constructor(private dataService: DataService) { }
 
-  getItems(){
+  getItems() {
     this.dataService.getShoppingItems()
       .subscribe(items => {
         this.shoppingItemList = items;
@@ -22,7 +24,7 @@ export class ShoppingItemComponent implements OnInit {
       });
   }
 
-  addItem(form){
+  addItem(form) {
     // console.log(form.value);
     let newItem: Item = {
       itemName: form.value.itemName,
@@ -35,10 +37,10 @@ export class ShoppingItemComponent implements OnInit {
     });
   }
 
-  deleteItem(id){
+  deleteItem(id) {
     this.dataService.deleteShoppingItem(id).subscribe(data => {
       console.log(data);
-      if (data.n == 1){
+      if (data.n == 1) {
         for (var i = 0; i < this.shoppingItemList.length; i++){
           if (id == this.shoppingItemList[i]._id){
             this.shoppingItemList.splice(i, 1);
@@ -46,6 +48,35 @@ export class ShoppingItemComponent implements OnInit {
         }
       }
     });
+  }
+
+  showEditForm(item) {
+    this.selectedItem = item;
+    this.togglingForm();
+  }
+
+  editItem(form) {
+    let updateItem: Item = {
+      _id: this.selectedItem._id,
+      itemName: form.value.itemName,
+      itemQuantity: form.value.itemQuantity,
+      itemBought: this.selectedItem.itemBought
+    }
+
+    this.dataService.updateShoppingItem(updateItem)
+      .subscribe(result => {
+        console.log('Original item to be updated with old values: ' + result.itemName);
+        this.togglingForm();
+        this.getItems();
+      })
+  }
+
+  cancelUpdate(){
+    this.togglingForm();
+  }
+
+  togglingForm(){
+    this.toggleForm = !this.toggleForm;
   }
 
   ngOnInit() {

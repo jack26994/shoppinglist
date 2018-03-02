@@ -1,4 +1,4 @@
-<form #frm="ngForm" (ngSubmit)="addItem(frm)">
+<form #frm="ngForm" (ngSubmit)="addItem(frm)" *ngIf="!toggleForm" style="margin: 5px 0;">
   <h2>Add Item</h2>
   <div class="form-group">
     <label for="">Name: </label>
@@ -11,22 +11,38 @@
   <button type="submit" class="btn btn-success" name="">Add Item</button>
 </form>
 
+<form #editFrm="ngForm" (ngSubmit)="editItem(editFrm)" *ngIf="toggleForm" style="margin: 5px 0;">
+  <h2>Edit Item</h2>
+  <div class="form-group">
+    <label for="">Name: </label>
+    <input type="text" class="form-control" name="itemName" value="" [ngModel]="selectedItem.itemName">
+  </div>
+  <div class="form-group">
+    <label for="">Quantity: </label>
+    <input type="number" class="form-control" name="itemQuantity" value="" [ngModel]="selectedItem.itemQuantity">
+  </div>
+  <button type="submit" class="btn btn-success" name="">Save Item</button>
+  <button class="btn btn-danger" (click)="cancelUpdate()">Cancel</button>
+</form>
+
+<hr>
+
 <h2>Shopping List</h2>
 <!-- <div class="row"> -->
-  <div *ngFor="let item of shoppingItemList" class="row">
-    <div class="col-md-1">
+  <div class="table" *ngFor="let item of shoppingItemList" class="row">
+    <div class="col-md-1" style="margin: 5px 0;">
       <input type="checkbox" name="">
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" style="margin: 5px 0;">
         {{item.itemName}}
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2" style="margin: 5px 0;">
         {{item.itemQuantity}}
     </div>
-    <div class="col-md-3">
-        <button type="button" name="buttonEdit" class="btn btn-warning">Edit</button>
+    <div class="col-md-3" style="margin: 5px 0;">
+        <button type="button" name="buttonEdit" class="btn btn-warning" (click)="showEditForm(item)" [disabled]="toggleForm">Edit</button>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" style="margin: 5px 0;">
         <button type="button" name="buttonDelete" class="btn btn-danger" (click)="deleteItem(item._id)">Delete</button>
     </div>
   </div>
