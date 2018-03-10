@@ -18,10 +18,15 @@ export class ShoppingItemComponent implements OnInit {
 
   getItems() {
     this.dataService.getShoppingItems()
-      .subscribe(items => {
+      .subscribe(
+        items => {
         this.shoppingItemList = items;
         // console.log('data from DataService: ' + this.shoppingItemList[0].itemName);
-      });
+        },
+        error => {
+          //some code
+        } 
+      );
   }
 
   addItem(form) {
@@ -40,15 +45,20 @@ export class ShoppingItemComponent implements OnInit {
   deleteItem(id) {
     this.dataService.deleteShoppingItem(id).subscribe(data => {
       console.log(data);
-      if (data.n == 1) {
-        for (var i = 0; i < this.shoppingItemList.length; i++){
-          if (id == this.shoppingItemList[i]._id){
-            this.shoppingItemList.splice(i, 1);
-          }
-        }
-      }
+      this.getItems();
     });
   }
+
+ /*  data => {
+    console.log(data);
+    if (data.n == 1) {
+      for (var i = 0; i < this.shoppingItemList.length; i++){
+        if (id == this.shoppingItemList[i]._id){
+          this.shoppingItemList.splice(i, 1);
+        }
+      }
+    }
+  } */
 
   showEditForm(item) {
     this.selectedItem = item;
