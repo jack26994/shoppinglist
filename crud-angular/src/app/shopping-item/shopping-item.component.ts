@@ -25,7 +25,7 @@ export class ShoppingItemComponent implements OnInit {
         },
         error => {
           //some code
-        } 
+        }
       );
   }
 
@@ -75,17 +75,27 @@ export class ShoppingItemComponent implements OnInit {
 
     this.dataService.updateShoppingItem(updateItem)
       .subscribe(result => {
-        console.log('Original item to be updated with old values: ' + result.itemName);
+        console.log(`Original item to be updated with old values: ${result.itemQuantity}`);
         this.togglingForm();
         this.getItems();
-      })
+      });
   }
 
-  cancelUpdate(){
+  updateItemCheckbox(item) {
+    item.itemBought = !item.itemBought;
+
+    this.dataService.updateShoppingItem(item)
+      .subscribe(result => {
+        console.log(`Original checkbox value: ${result.itemBought}`)
+        this.getItems();
+      });
+  }
+
+  cancelUpdate() {
     this.togglingForm();
   }
 
-  togglingForm(){
+  togglingForm() {
     this.toggleForm = !this.toggleForm;
   }
 

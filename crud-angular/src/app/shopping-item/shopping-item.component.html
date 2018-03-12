@@ -1,27 +1,27 @@
-<form #frm="ngForm" (ngSubmit)="addItem(frm)" *ngIf="!toggleForm" style="margin: 5px 0;">
+<form #frm="ngForm" (submit)="addItem(frm); frm.reset();" (if)="!toggleForm" style="margin: 5px 0;">
   <h2>Add Item</h2>
   <div class="form-group">
     <label for="">Name: </label>
-    <input type="text" class="form-control" name="itemName" value="" ngModel>
+    <input type="text" class="form-control" name="itemName" value="" ngModel required>
   </div>
   <div class="form-group">
     <label for="">Quantity: </label>
-    <input type="number" class="form-control" name="itemQuantity" value="" ngModel>
+    <input type="number" class="form-control" name="itemQuantity" value="" ngModel required>
   </div>
-  <button type="submit" class="btn btn-success" name="">Add Item</button>
+  <button type="submit" class="btn btn-success" name="" [disabled]="frm.invalid">Add Item</button>
 </form>
 
-<form #editFrm="ngForm" (ngSubmit)="editItem(editFrm)" *ngIf="toggleForm" style="margin: 5px 0;">
+<form #editFrm="ngForm" (submit)="editItem(editFrm)" (if)="toggleForm" style="margin: 5px 0;">
   <h2>Edit Item</h2>
   <div class="form-group">
     <label for="">Name: </label>
-    <input type="text" class="form-control" name="itemName" value="" [ngModel]="selectedItem.itemName">
+    <input type="text" class="form-control" name="itemName" value="" [ngModel]="selectedItem.itemName" required>
   </div>
   <div class="form-group">
     <label for="">Quantity: </label>
-    <input type="number" class="form-control" name="itemQuantity" value="" [ngModel]="selectedItem.itemQuantity">
+    <input type="number" class="form-control" name="itemQuantity" value="" [ngModel]="selectedItem.itemQuantity" required>
   </div>
-  <button type="submit" class="btn btn-success" name="">Save Item</button>
+  <button type="submit" class="btn btn-success" name="" [disabled]="editFrm.invalid">Save Item</button>
   <button class="btn btn-danger" (click)="cancelUpdate()">Cancel</button>
 </form>
 
@@ -31,7 +31,7 @@
 <!-- <div class="row"> -->
   <div class="table" *ngFor="let item of shoppingItemList" class="row">
     <div class="col-md-1" style="margin: 5px 0;">
-      <input type="checkbox" name="">
+      <input type="checkbox" name="" [checked]="item.itemBought" (click)="updateItemCheckbox(item)">
     </div>
     <div class="col-md-3" style="margin: 5px 0;">
         {{item.itemName}}
